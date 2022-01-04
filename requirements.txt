@@ -1,0 +1,2 @@
+azure_storage==0.37.0
+opencv_python==4.5.5.62

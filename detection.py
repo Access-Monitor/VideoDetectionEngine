@@ -47,7 +47,7 @@ def detect(cascade, video_capture):
             filename = f"{str(uuid.uuid4())}_{datetime.today().strftime('%Y-%m-%d-%H-%M-%S')}.jpg"
             cv2.imwrite(os.path.join(DEFAULT_OUTPUT_PATH, filename), frame_img)
             upload_detected(filename)
-            time.sleep(15)
+            time.sleep(10)
 
 
 cascade = initialize_cascade(cascade_path=FACE_CASCADE_PATH)
