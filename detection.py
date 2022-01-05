@@ -51,5 +51,5 @@ def detect(cascade, video_capture):
 
 
 cascade = initialize_cascade(cascade_path=FACE_CASCADE_PATH)
-capture = setup_videocapture(device_id=1, resolution_width=1280, resolution_height=720)
+capture = setup_videocapture(device_id=0, resolution_width=1280, resolution_height=720)
 detect(cascade=cascade, video_capture=capture)
