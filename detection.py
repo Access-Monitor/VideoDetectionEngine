@@ -8,7 +8,7 @@ import cv2
 from azure.storage.blob import BlobServiceClient
 
 FACE_CASCADE_PATH = "resources\\detection_cascades\\haarcascade_frontalcatface.xml"
-DEFAULT_OUTPUT_PATH = "resources\\images\\"
+BASE_OUTPUT_PATH = "resources\\images\\"
 BLOB_CONTAINER_NAME = "accessmonitorblob"
 AZURESTORAGE_CONNECTION_STRING = os.getenv("AZURESTORAGE_CONNECTION_STRING")
 
@@ -29,11 +29,15 @@ def setup_videocapture(device_id=0, resolution_width=1280, resolution_height=720
 
 
 def upload_detected(blob_filename):
-    blob_service_client = BlobServiceClient.from_connection_string(AZURESTORAGE_CONNECTION_STRING)
-    blob_client = blob_service_client.get_blob_client(container=BLOB_CONTAINER_NAME, blob=blob_filename)
-    with open(os.path.join(DEFAULT_OUTPUT_PATH, blob_filename), "rb") as file:
-        img_data = file.read()
-    blob_client.upload_blob(img_data)
+    file_path = os.path.join(BASE_OUTPUT_PATH, blob_filename)
+    try:
+        blob_service_client = BlobServiceClient.from_connection_string(AZURESTORAGE_CONNECTION_STRING)
+        blob_client = blob_service_client.get_blob_client(container=BLOB_CONTAINER_NAME, blob=blob_filename)
+        with open(file_path, "rb") as file:
+            img_data = file.read()
+            blob_client.upload_blob(img_data)
+    finally:
+        os.remove(file_path)
 
 
 def detect(cascade, video_capture):
@@ -45,7 +49,7 @@ def detect(cascade, video_capture):
 
         if len(faces):
             filename = f"{str(uuid.uuid4())}_{datetime.today().strftime('%Y-%m-%d-%H-%M-%S')}.jpg"
-            cv2.imwrite(os.path.join(DEFAULT_OUTPUT_PATH, filename), frame_img)
+            cv2.imwrite(os.path.join(BASE_OUTPUT_PATH, filename), frame_img)
             upload_detected(filename)
             time.sleep(10)
 
