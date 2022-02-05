@@ -61,9 +61,9 @@ def detect(cascade, video_capture):
 
 
 cascade = initialize_cascade(cascade_path=FACE_CASCADE_PATH)
-log.info("Initialized haar cascade")
+log.info(f"Initialized haar cascade {cascade}")
 
 capture = setup_videocapture(device_id=0, resolution_width=1280, resolution_height=720)
-log.info("Initialized video capture")
+log.info(f"Initialized video capture {capture}")
 
 detect(cascade=cascade, video_capture=capture)
