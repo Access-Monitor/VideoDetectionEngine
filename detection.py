@@ -1,16 +1,18 @@
+import logging
 import os.path
 import time
 import uuid
+import winsound
 from datetime import datetime
 
 import cv2
-
 from azure.storage.blob import BlobServiceClient
 
 FACE_CASCADE_PATH = "resources\\detection_cascades\\haarcascade_frontalcatface.xml"
 BASE_OUTPUT_PATH = "resources\\images\\"
 BLOB_CONTAINER_NAME = "accessmonitorblob"
 AZURESTORAGE_CONNECTION_STRING = os.getenv("AZURESTORAGE_CONNECTION_STRING")
+log = logging.getLogger("detectionLogger")
 
 
 def initialize_cascade(cascade_path):
@@ -36,8 +38,11 @@ def upload_detected(blob_filename):
         with open(file_path, "rb") as file:
             img_data = file.read()
             blob_client.upload_blob(img_data)
+            winsound.Beep(2500, 1000)
+            log.debug(f"Uploaded detection {file_path}")
     finally:
         os.remove(file_path)
+        log.debug(f"Cleaned up local storage from detection {file_path}")
 
 
 def detect(cascade, video_capture):
@@ -48,12 +53,17 @@ def detect(cascade, video_capture):
         faces = cascade.detectMultiScale(gray_frame, minSize=[70, 70], flags=cv2.CASCADE_SCALE_IMAGE)
 
         if len(faces):
+            log.debug("Detected face from video record")
             filename = f"{str(uuid.uuid4())}_{datetime.today().strftime('%Y-%m-%d-%H-%M-%S')}.jpg"
             cv2.imwrite(os.path.join(BASE_OUTPUT_PATH, filename), frame_img)
             upload_detected(filename)
-            time.sleep(10)
+            time.sleep(30)
 
 
 cascade = initialize_cascade(cascade_path=FACE_CASCADE_PATH)
+log.info("Initialized haar cascade")
+
 capture = setup_videocapture(device_id=0, resolution_width=1280, resolution_height=720)
+log.info("Initialized video capture")
+
 detect(cascade=cascade, video_capture=capture)
