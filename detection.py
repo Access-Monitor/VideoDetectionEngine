@@ -83,7 +83,7 @@ def detect(cascade, video_capture):
 
             cached_frames.clear()
             empty_frames_count = 0
-            time.sleep(3)
+            time.sleep(5)
 
 
 def create_blob_filename():
@@ -96,8 +96,7 @@ def detection_cache_is_not_full(cached_frames):
 
 
 def detection_cache_is_full(cached_frames):
-    return len(
-        cached_frames) >= MAX_CACHE_SIZE
+    return len(cached_frames) >= MAX_CACHE_SIZE
 
 
 def there_are_some_cached_detections(cached_frames):
