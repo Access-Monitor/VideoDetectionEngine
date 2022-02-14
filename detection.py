@@ -15,7 +15,8 @@ MAX_CACHE_SIZE = 50
 FACE_CASCADE_PATH = "resources\\detection_cascades\\haarcascade_frontalcatface.xml"
 BASE_OUTPUT_PATH = "resources\\images\\"
 BLOB_CONTAINER_NAME = "accessmonitorblob"
-CAMERA_ID = "camera_01"
+# CAMERA_ID = "camera_01"
+CAMERA_ID = os.getenv("CAMERA_ID", "camera_01")
 AZURESTORAGE_CONNECTION_STRING = os.getenv("AZURESTORAGE_CONNECTION_STRING")
 logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 
