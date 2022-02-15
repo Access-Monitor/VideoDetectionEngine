@@ -12,8 +12,8 @@ from azure.storage.blob import BlobServiceClient
 EMPTY_FRAMES_THRESHOLD = 50
 MAX_CACHE_SIZE = 50
 
-FACE_CASCADE_PATH = "resources\\detection_cascades\\haarcascade_frontalcatface.xml"
-BASE_OUTPUT_PATH = "resources\\images\\"
+FACE_CASCADE_PATH = os.path.join("resources", "detection_cascades", "haarcascade_frontalcatface.xml")
+BASE_OUTPUT_PATH = os.path.join("resources", "images")
 BLOB_CONTAINER_NAME = "accessmonitorblob"
 # CAMERA_ID = "camera_01"
 CAMERA_ID = os.getenv("CAMERA_ID", "camera_01")
